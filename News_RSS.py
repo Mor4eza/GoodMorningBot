@@ -10,7 +10,7 @@ class News:
         bbc_persian = "https://feeds.bbci.co.uk/persian/rss.xml"
         irna = "https://www.irna.ir/rss"
      
-    def get_news(self, source: NewsSources.digiato, count: int = 1) -> str:
+    def get_news(self, source: NewsSources = NewsSources.digiato, count: int = 1) -> str:
         ssl._create_default_https_context = ssl._create_unverified_context
         print(source.value)
         rss_url = source.value

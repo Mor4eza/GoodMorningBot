@@ -152,7 +152,7 @@ async def today_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
 async def news_command(update: Update, Context: ContextTypes.DEFAULT_TYPE):
     newsMessage = []
     for feed in News.NewsSources:
-        news = news_feeds.get_news(feed)
+        news = news_feeds.get_news(feed, count=1)
         newsMessage.append(news)
     try: 
         await update.message.reply_chat_action(action="typing")
@@ -175,7 +175,7 @@ def build_message():
     condition = weather_data["description"]
     weather_message = weather_tip(temp, main)
 
-    news = news_feeds.get_news()
+    news = news_feeds.get_news(count=3)
     quote = daily_quote.get_random_quote()
     
     message = f"""
