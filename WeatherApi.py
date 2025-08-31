@@ -71,20 +71,20 @@ class WeatherAPI:
         try:
             message = (
                 
-                f"🌤️ وضعیت آب و هوا در {WeatherAPI.to_persian_numbers(weather_data['city'])}, {WeatherAPI.to_persian_numbers(weather_data['country'])}:\n\n"
-                f"• دما: {WeatherAPI.to_persian_numbers(weather_data['temperature'])} سانتی گراد ( دمای احساسی {WeatherAPI.to_persian_numbers(weather_data['feels_like'])} سانتی گراد)\n"
+                f"🌤️ وضعیت آب و هوا در {weather_data['city']}, {weather_data['country']}:\n\n"
+                f"• دما: {int(weather_data['temperature'])} سانتی گراد ( دمای احساسی {int(weather_data['feels_like'])} سانتی گراد)\n"
                 f"• شرایط: {weather_data['description']}\n"
-                f"• رطوبت: {WeatherAPI.to_persian_numbers(weather_data['humidity'])}%\n"
-                f"• سرعت باد: {WeatherAPI.to_persian_numbers(weather_data['wind_speed'])} متر بر ثانیه\n"
-                f"• فشار: {WeatherAPI.to_persian_numbers(weather_data['pressure'])} هکتوپاسکال"
+                f"• رطوبت: {int(weather_data['humidity'])}%\n"
+                f"• سرعت باد: {int(weather_data['wind_speed'])} متر بر ثانیه\n"
+                f"• فشار: {weather_data['pressure']} هکتوپاسکال"
             )
             
             if weather_data.get('visibility'):
                 visibility_km = weather_data['visibility'] / 1000
-                visibility_km_persian_numbers = WeatherAPI.to_persian_numbers(visibility_km)
+                visibility_km_persian_numbers = visibility_km
                 message += f"\n• وسعت دید: {visibility_km_persian_numbers} کیلومتر"
                 
-            return message
+            return WeatherAPI.to_persian_numbers(message)
         except KeyError as e:
             logger.error(f"Missing key in weather data: {e}")
             return "❌ Error formatting weather information."

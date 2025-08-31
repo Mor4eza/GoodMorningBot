@@ -9,7 +9,7 @@ from bs4 import BeautifulSoup
 import requests
 import jdatetime
 
-CITY = "Tehran"
+CITY = "Kish"
 
 # Configure logging
 logging.basicConfig(
@@ -31,17 +31,17 @@ daily_quote = DailyQuotes()
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     """Send a message when the command /start is issued."""
     welcome_text = (
-        f"🌤️ Welcome to Weather Bot {update.effective_user.first_name}!\n\n"
-        "I can provide weather information for any location.\n"
-        "You can:\n"
-        "• Send your current location 📍\n"
-        "• Type a city name 🌆\n"
-        "• Use /weather command followed by city name\n\n"
-        "Send your location or type a city name to get started!"
+       f"🌤️ به ربات هواشناسی خوش آمدی {update.effective_user.first_name}!\n\n" \
+        "من می‌توانم اطلاعات آب و هوا را برای هر مکانی ارائه دهم.\n" \
+        "شما می‌توانید:\n" \
+        "• موقعیت فعلی خود را ارسال کنید 📍\n" \
+        "• نام یک شهر را تایپ کنید 🌆\n" \
+        "• از دستور /weather به همراه نام شهر استفاده کنید\n\n" \
+        "برای شروع، موقعیت خود را ارسال کنید یا نام یک شهر را تایپ کنید!"
     )
     
     # Create a keyboard with location button
-    location_keyboard = KeyboardButton(text="📍 Send Location", request_location=True)
+    location_keyboard = KeyboardButton(text="📍ارسال موقعیت", request_location=True)
     reply_markup = ReplyKeyboardMarkup(
         [[location_keyboard]], 
         resize_keyboard=True, 
@@ -68,11 +68,11 @@ async def handle_location(update: Update, context: ContextTypes.DEFAULT_TYPE):
             emoji = weather_api.get_weather_emoji(weather_data['weather_icon'])
             await update.message.reply_text(f"{emoji} {weather_info}")
         else:
-            await update.message.reply_text("❌ Sorry, I couldn't fetch weather data for your location.")
+            await update.message.reply_text("❌ متاسفانه اطلاعات آب و هوای این موقعیت در درسترس نمی‌باشد")
         
     except Exception as e:
         logger.error(f"Error in handle_location: {e}")
-        await update.message.reply_text("❌ Sorry, I couldn't process your location.")
+        await update.message.reply_text("❌ متاسفانه اطلاعات آب و هوای این موقعیت در درسترس نمی‌باشد")
 
 async def handle_text(update: Update, context: ContextTypes.DEFAULT_TYPE):
     """Handle text messages (city names)."""
@@ -80,7 +80,7 @@ async def handle_text(update: Update, context: ContextTypes.DEFAULT_TYPE):
         city_name = update.message.text.strip()
         
         if not city_name:
-            await update.message.reply_text("Please provide a city name.")
+            await update.message.reply_text("نام شهر را وارد کنید")
             return
         
         # Show typing indicator
@@ -94,16 +94,17 @@ async def handle_text(update: Update, context: ContextTypes.DEFAULT_TYPE):
             emoji = weather_api.get_weather_emoji(weather_data['weather_icon'])
             await update.message.reply_text(f"{emoji} {weather_info}")
         else:
-            await update.message.reply_text("❌ City not found or weather data unavailable. Please check the city name and try again.")
+            await update.message.reply_text("❌ شهر پیدا نشد یا اطلاعات آب و هوا در دسترس نیست. لطفاً نام شهر را بررسی کرده و دوباره تلاش کنید."
+)
         
     except Exception as e:
         logger.error(f"Error in handle_text: {e}")
-        await update.message.reply_text("❌ Sorry, I couldn't process your request.")
+        await update.message.reply_text("❌ متأسفم، نتوانستم درخواست شما را پردازش کنم.")
 
 async def weather_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
     """Handle /weather command with city name."""
     if not context.args:
-        await update.message.reply_text("Please provide a city name. Example: /weather London")
+        await update.message.reply_text("لطفاً نام یک شهر را وارد کنید. مثال: /weather London")
         return
     city_name = " ".join(context.args)
     #5014301407
@@ -118,19 +119,22 @@ async def weather_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
         emoji = weather_api.get_weather_emoji(weather_data['weather_icon'])
         await update.message.reply_text(f"{emoji} {weather_info}")
     else:
-        await update.message.reply_text("❌ City not found or weather data unavailable. Please check the city name and try again.")
+        await update.message.reply_text("❌ شهر پیدا نشد یا اطلاعات آب و هوا در دسترس نیست. لطفاً نام شهر را بررسی کرده و دوباره تلاش کنید."
+)
 
 async def help_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
     #Send a message when the command /help is issued
     help_text = (
-        "🤖 Weather Bot Help\n\n"
-        "Available commands:\n"
-        "/start - Start the bot\n"
-        "/weather [city] - Get weather for a specific city\n"
-        "/help - Show this help message\n\n"
-        "You can also:\n"
-        "• Send your current location 📍\n"
-        "• Type any city name 🌆"
+       f"🤖 راهنمای ربات هواشناسی\n\n" \
+        "دستورات موجود:\n" \
+        "/start - راه‌اندازی ربات\n" \
+        "/weather [شهر] - دریافت وضعیت هوا برای یک شهر خاص\n" \
+        "/help - نمایش این پیام راهنما\n" \
+        "/today - نمایش اطلاعات امروز\n\n" \
+        "شما همچنین می‌توانید:\n" \
+        "• موقعیت فعلی خود را ارسال کنید 📍\n" \
+        "• نام هر شهری را تایپ کنید 🌆"
+
     )
     await update.message.reply_text(help_text)
 
@@ -168,8 +172,8 @@ def build_message():
 
 {weather_message}
 
-دمای فعلی: {temp}°
-حداکثر: {max_temp}° | حداقل: {min_temp}°
+دمای فعلی: {int(temp)}°
+حداکثر: {int(max_temp)}° | حداقل: {int(min_temp)}°
 شرایط: {condition}
 
 📰 خبرهای امروز:
