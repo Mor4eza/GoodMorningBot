@@ -5,11 +5,10 @@ from telegram.error import TelegramError
 
 from WeatherApi import WeatherAPI
 from DailyQuotes import DailyQuotes
-from bs4 import BeautifulSoup
-import requests
+from News_RSS import News
 import jdatetime
 
-CITY = "Kish"
+CITY = "Tehran"
 
 # Configure logging
 logging.basicConfig(
@@ -27,6 +26,9 @@ weather_api = WeatherAPI(OPENWEATHER_API_KEY)
 
 #initialize DailyQuote
 daily_quote = DailyQuotes()
+
+#initialize News_RSS
+news_feeds = News()
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     """Send a message when the command /start is issued."""
@@ -162,9 +164,9 @@ def build_message():
     condition = weather_data["description"]
     weather_message = weather_tip(temp, main)
 
-    news = "" #get_persian_news()
+    news = news_feeds.get_news()
     quote = daily_quote.get_random_quote()
-
+    
     message = f"""
 📅 امروز {today}
 
@@ -176,7 +178,7 @@ def build_message():
 حداکثر: {int(max_temp)}° | حداقل: {int(min_temp)}°
 شرایط: {condition}
 
-📰 خبرهای امروز:
+📰 سرخط خبرها:
 
 {news}
 
@@ -217,7 +219,7 @@ def weather_tip(temp, condition):
     elif "cloud" in condition:
         advice += " آسمان نیمه‌ابری ☁️."
     elif "clear" in condition:
-        advice += " آسمان صاف و آفتابی است 🌞."
+        advice += " آسمان صاف و بدون ابر است 🌞."
 
     return advice
 
