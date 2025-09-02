@@ -2,7 +2,7 @@ import logging
 from telegram import Update, ReplyKeyboardMarkup, KeyboardButton
 from telegram.ext import Application, CommandHandler, MessageHandler, filters, ContextTypes
 from telegram.error import TelegramError
-
+from telegram.constants import ParseMode
 from WeatherApi import WeatherAPI
 from DailyQuotes import DailyQuotes
 from News_RSS import News
@@ -144,7 +144,7 @@ async def today_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
     #Send Today Message when the command /today is issued
     try:
         msg = build_message()
-        await update.message.reply_text(msg)
+        await update.message.reply_text(msg, parse_mode=ParseMode.HTML, disable_web_page_preview=True)
     except Exception as e:
         await update.message.reply_text("⚠️ خطا در گرفتن اطلاعات روزانه")
         print("Today command error:", e)

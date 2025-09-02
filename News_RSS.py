@@ -9,6 +9,7 @@ class News:
         print('[test](https://example.com) (test)')
         headlines = []
         for entry in feed.entries[:3]:
-            entry_link = f"[{feed.feed.description}]({entry.link})"
-            headlines.append(f"- {entry.title}")
+            entry_link = f"<a href='{entry.link}'>{feed.feed.description}</a>"
+            headlines.append(f"- {entry.title} {entry_link}")
         return "\n".join(headlines)
+    
