@@ -1,4 +1,4 @@
-# GoodMorningBot
+# Good Morning Bot
 
 **GoodMorningBot** is a Telegram bot written in Python that sends you a personalized morning update, including:
 
