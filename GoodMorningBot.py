@@ -149,6 +149,17 @@ async def today_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
         await update.message.reply_text("⚠️ خطا در گرفتن اطلاعات روزانه")
         print("Today command error:", e)
 
+async def news_command(update: Update, Context: ContextTypes.DEFAULT_TYPE):
+    newsMessage = []
+    for feed in News.NewsSources:
+        news = news_feeds.get_news(feed)
+        newsMessage.append(news)
+    try: 
+        await update.message.reply_chat_action(action="typing")
+        msg = "\n".join(newsMessage)
+        await update.message.reply_text(msg, parse_mode=ParseMode.HTML, disable_web_page_preview=True)
+    except Exception as e:
+        await update.message.reply_text("⚠️ خطا در گرفتن اخبار روزانه")
 # ---------------------------------------- #
 # Build Daily Message
 def build_message():
@@ -235,6 +246,7 @@ def main():
     application.add_handler(CommandHandler("weather", weather_command))
     application.add_handler(CommandHandler("help", help_command))
     application.add_handler(CommandHandler("today", today_command))
+    application.add_handler(CommandHandler("news", news_command))
     application.add_handler(MessageHandler(filters.LOCATION, handle_location))
     application.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, handle_text))
     application.add_error_handler(error_handler)
