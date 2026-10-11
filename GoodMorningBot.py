@@ -17,8 +17,7 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
-# Your API tokens
-TELEGRAM_BOT_TOKEN = "8000264991:AAE4fWZNbTvM8KqPhBK4_83Vu4xlEtXIOIw"
+TELEGRAM_BOT_TOKEN = "8862191907:AAF_mMo-A_Q2i3kHSLwbB4cTSjXKGuy-YLI"
 OPENWEATHER_API_KEY = "634fe78358fb2c0da4e326c38d56a475"
 
 # Initialize WeatherAPI
@@ -177,7 +176,7 @@ def build_message():
 
     news = news_feeds.get_news(count=3)
     quote = daily_quote.get_random_quote()
-    
+    events = daily_quote.get_today_events()
     message = f"""
 📅 امروز {today}
 
@@ -196,6 +195,10 @@ def build_message():
 💡 نقل قول روز:
 
 {quote}
+
+رویدادهای امروز:
+
+{events}
 """
     return WeatherAPI.to_persian_numbers(message)
 
