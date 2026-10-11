@@ -20,7 +20,7 @@ class TodayEvents:
 
             holiday_status = "تعطیل رسمی" if data.get("is_holiday") else "تعطیل نیست"
 
-            return f"وضعیت امروز: {holiday_status}\n" + "\n".join(events)
+            return f"وضعیت امروز: {holiday_status}\n-" + "\n-".join(events)
 
         except requests.RequestException as error:
             print(f"Failed to fetch today's events: {error}")
