@@ -18,8 +18,8 @@ class DailyQuotes:
             resp = requests.get(url, timeout=10)
             resp.encoding = "utf-8"
             soup = BeautifulSoup(resp.content, "html.parser")
-            text = soup.find("div",{"class":"ExpandableText_text__R_Pv6 ExpandableText_clamped__m5UVT"}).get_text()
-            aouthor = soup.find("div",{"class":"BrainyQuoteAuthor_root__6iSkt"}).get_text()
+            text = soup.find("div",{"class":"ExpandableText-module-scss-module__ku-mLW__text ExpandableText-module-scss-module__ku-mLW__clamped"}).get_text()
+            aouthor = soup.find("div",{"class":"BrainyQuoteAuthor-module-scss-module__wPXe-G__root"}).get_text()
             return f"{text} \n ✍️{aouthor}"
 
         except Exception as e:
@@ -27,7 +27,7 @@ class DailyQuotes:
 
         return "موفقیت نتیجه کوشش‌های کوچک است که هر روز تکرار می‌شوند."
 
-    def get_today_events():
+    def get_today_events(self) -> str:
         URL = "https://99taghvim.ir/"
 
         headers = {
@@ -52,9 +52,10 @@ class DailyQuotes:
             # Find the next li elements after the title
             for element in title_element.find_all_next("li", class_="cl_li_tryetwer"):
                 events.append(element.get_text(" ", strip=True))
-
+               
         print(events)
+        return "\n".join(events);
 
                                                                     
 if __name__ == '__main__':
-    print(DailyQuotes.get_today_events())
+    print(DailyQuotes.get_random_quote(""))
