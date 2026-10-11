@@ -5,6 +5,7 @@ from telegram.error import TelegramError
 from telegram.constants import ParseMode
 from WeatherApi import WeatherAPI
 from DailyQuotes import DailyQuotes
+from TodayEvents import TodayEvents
 from News_RSS import News
 import jdatetime
 
@@ -25,6 +26,9 @@ weather_api = WeatherAPI(OPENWEATHER_API_KEY)
 
 #initialize DailyQuote
 daily_quote = DailyQuotes()
+
+#initialize TodayEvents
+todayEvents = TodayEvents()
 
 #initialize News_RSS
 news_feeds = News()
@@ -176,7 +180,7 @@ def build_message():
 
     news = news_feeds.get_news(count=3)
     quote = daily_quote.get_random_quote()
-    events = daily_quote.get_today_events()
+    events = todayEvents.get_today_events()
     message = f"""
 📅 امروز {today}
 

@@ -27,34 +27,34 @@ class DailyQuotes:
 
         return "موفقیت نتیجه کوشش‌های کوچک است که هر روز تکرار می‌شوند."
 
-    def get_today_events(self) -> str:
-        URL = "https://99taghvim.ir/"
+    # def get_today_events(self) -> str:
+    #     URL = "https://99taghvim.ir/"
 
-        headers = {
-            "User-Agent": "Mozilla/5.0"
-        }
+    #     headers = {
+    #         "User-Agent": "Mozilla/5.0"
+    #     }
 
-        response = requests.get(URL, headers=headers, timeout=10)
-        response.raise_for_status()
+    #     response = requests.get(URL, headers=headers, timeout=10)
+    #     response.raise_for_status()
 
-        soup = BeautifulSoup(response.text, "html.parser")
+    #     soup = BeautifulSoup(response.text, "html.parser")
 
-        title = soup.find(
-            string=lambda text: text and "مناسبت امروز چیست" in text
-        )
+    #     title = soup.find(
+    #         string=lambda text: text and "مناسبت امروز چیست" in text
+    #     )
 
-        events = []
+    #     events = []
 
-        if title:
-            # Find the closest element containing the title
-            title_element = title.parent
+    #     if title:
+    #         # Find the closest element containing the title
+    #         title_element = title.parent
 
-            # Find the next li elements after the title
-            for element in title_element.find_all_next("li", class_="cl_li_tryetwer"):
-                events.append(element.get_text(" ", strip=True))
+    #         # Find the next li elements after the title
+    #         for element in title_element.find_all_next("li", class_="cl_li_tryetwer"):
+    #             events.append(element.get_text(" ", strip=True))
                
-        print(events)
-        return "\n".join(events);
+    #     print(events)
+    #     return "\n".join(events);
 
                                                                     
 if __name__ == '__main__':
