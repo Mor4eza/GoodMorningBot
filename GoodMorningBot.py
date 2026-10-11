@@ -8,6 +8,8 @@ from DailyQuotes import DailyQuotes
 from TodayEvents import TodayEvents
 from News_RSS import News
 import jdatetime
+from dotenv import load_dotenv
+import os
 
 CITY = "Tehran"
 
@@ -17,9 +19,10 @@ logging.basicConfig(
     level=logging.INFO
 )
 logger = logging.getLogger(__name__)
+load_dotenv()
 
-TELEGRAM_BOT_TOKEN = "8862191907:AAF_mMo-A_Q2i3kHSLwbB4cTSjXKGuy-YLI"
-OPENWEATHER_API_KEY = "634fe78358fb2c0da4e326c38d56a475"
+TELEGRAM_BOT_TOKEN = os.getenv("TELEGRAM_BOT_TOKEN")
+OPENWEATHER_API_KEY = os.getenv("OPENWEATHER_API_KEY")
 
 # Initialize WeatherAPI
 weather_api = WeatherAPI(OPENWEATHER_API_KEY)

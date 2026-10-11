@@ -10,3 +10,4 @@ urllib3==1.26.8
 feedparser
 jdatetime
 python-telegram-bot
+python-dotenv
