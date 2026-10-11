@@ -93,11 +93,50 @@ Ensure you have:
   python GoodMorningBot.py
   ```
 
-- **Automated Scheduling**  
-  Use cron (Linux/macOS) or Task Scheduler (Windows) to run daily. Example cron entry (run at 7 AM every day):
-  ```cron
-  0 7 * * * cd /path/to/GoodMorningBot && /usr/bin/python3 GoodMorningBot.py >> bot.log 2>&1
-  ```
+### Daily Morning Broadcast (GitHub Actions)
+
+The polling bot (`GoodMorningBot.py`) must run somewhere 24/7 to receive `/start`
+and collect subscribers. The **scheduled broadcast itself runs on GitHub Actions**:
+it reads the subscriber list and sends the morning message every day at 08:00 Tehran.
+
+Files involved:
+
+- `subscribers.py` / `subscribers.json` — persists the chat ids of subscribed users.
+  `/start` adds the user, `/stop` removes them.
+- `broadcast.py` — builds the daily message and sends it to every subscriber.
+- `.github/workflows/morning-broadcast.yml` — runs `broadcast.py` on a schedule.
+
+**Setup**
+
+1. Push the repository to GitHub (default branch = `main`).
+2. Add repository secrets under **Settings → Secrets and variables → Actions**:
+   - `TELEGRAM_BOT_TOKEN`
+   - `OPENWEATHER_API_KEY`
+   - `TELEGRAM_CHAT_ID` *(optional)* — a single chat/channel id for quick testing.
+3. Run the bot (`python GoodMorningBot.py`) so users press `/start`; commit the
+   updated `subscribers.json` afterwards so the Action can see it.
+4. Trigger the workflow once manually via **Actions → Morning Broadcast → Run workflow**
+   to verify, then let the schedule take over.
+
+```yaml
+# .github/workflows/morning-broadcast.yml (key part)
+on:
+  schedule:
+    - cron: "30 4 * * *"   # 08:00 Tehran (UTC+03:30) = 04:30 UTC
+  workflow_dispatch:
+```
+
+> **Notes**
+> - GitHub cron is UTC and can be delayed by a few minutes under load.
+> - Scheduled workflows run only on the default branch and are disabled after
+>   ~60 days without repository activity.
+> - Anyone can send `/stop` to unsubscribe.
+
+**Alternative (self-hosted cron)** — if you run the bot on your own server, keep
+`GoodMorningBot.py` running and add a cron entry:
+```cron
+30 4 * * * cd /path/to/GoodMorningBot && /usr/bin/python3 broadcast.py >> bot.log 2>&1
+```
 
 ---
 

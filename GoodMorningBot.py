@@ -7,6 +7,7 @@ from WeatherApi import WeatherAPI
 from DailyQuotes import DailyQuotes
 from TodayEvents import TodayEvents
 from News_RSS import News
+from subscribers import add_subscriber, remove_subscriber
 import jdatetime
 from dotenv import load_dotenv
 import os
@@ -56,7 +57,18 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
         one_time_keyboard=True
     )
     
+    if add_subscriber(update.effective_chat.id):
+        logger.info(f"New subscriber: {update.effective_chat.id}")
+
     await update.message.reply_text(welcome_text, reply_markup=reply_markup)
+
+async def stop_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    """Unsubscribe the user from the daily morning message."""
+    removed = remove_subscriber(update.effective_chat.id)
+    if removed:
+        await update.message.reply_text("❌ اشتراک پیام صبحگاهی لغو شد. برای فعال‌سازی دوباره /start را بزنید.")
+    else:
+        await update.message.reply_text("شما هنوز مشترک پیام صبحگاهی نیستید.")
 
 async def handle_location(update: Update, context: ContextTypes.DEFAULT_TYPE):
     """Handle incoming location messages."""
@@ -273,6 +285,7 @@ def main():
 
     # Add handlers
     application.add_handler(CommandHandler("start", start))
+    application.add_handler(CommandHandler("stop", stop_command))
     application.add_handler(CommandHandler("weather", weather_command))
     application.add_handler(CommandHandler("help", help_command))
     application.add_handler(CommandHandler("today", today_command))
