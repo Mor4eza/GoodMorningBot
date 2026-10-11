@@ -128,14 +128,17 @@ async def weather_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
 )
 
 async def help_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    #Send a message when the command /help is issued
+        #Send a message when the command /help is issued
     help_text = (
        f"🤖 راهنمای ربات هواشناسی\n\n" \
         "دستورات موجود:\n" \
         "/start - راه‌اندازی ربات\n" \
         "/weather [شهر] - دریافت وضعیت هوا برای یک شهر خاص\n" \
         "/help - نمایش این پیام راهنما\n" \
-        "/today - نمایش اطلاعات امروز\n\n" \
+        "/today - نمایش اطلاعات امروز\n" \
+        "/quotes - نمایش نقل قول روزانه\n" \
+        "/events - نمایش رویدادهای روزانه\n" \
+        "/news - نمایش اخبار روزانه\n\n" \
         "شما همچنین می‌توانید:\n" \
         "• موقعیت فعلی خود را ارسال کنید 📍\n" \
         "• نام هر شهری را تایپ کنید 🌆"
@@ -163,6 +166,23 @@ async def news_command(update: Update, Context: ContextTypes.DEFAULT_TYPE):
         await update.message.reply_text(msg, parse_mode=ParseMode.HTML, disable_web_page_preview=True)
     except Exception as e:
         await update.message.reply_text("⚠️ خطا در گرفتن اخبار روزانه")
+
+async def quotes_command(update: Update, Context: ContextTypes.DEFAULT_TYPE):
+    try: 
+        await update.message.reply_chat_action(action="typing")
+        msg = daily_quote.get_random_quote()
+        await update.message.reply_text(msg, parse_mode=ParseMode.HTML, disable_web_page_preview=True)
+    except Exception as e:
+        await update.message.reply_text("⚠️ خطا در گرفتن نقل قول روزانه")
+
+async def events_command(update: Update, Context: ContextTypes.DEFAULT_TYPE):
+    try: 
+        await update.message.reply_chat_action(action="typing")
+        msg = todayEvents.get_today_events()
+        await update.message.reply_text(msg, parse_mode=ParseMode.HTML, disable_web_page_preview=True)
+    except Exception as e:
+        await update.message.reply_text("⚠️ خطا در گرفتن رویدادهای روزانه")
+
 # ---------------------------------------- #
 # Build Daily Message
 def build_message():
@@ -254,6 +274,8 @@ def main():
     application.add_handler(CommandHandler("help", help_command))
     application.add_handler(CommandHandler("today", today_command))
     application.add_handler(CommandHandler("news", news_command))
+    application.add_handler(CommandHandler("quotes", quotes_command))
+    application.add_handler(CommandHandler("events", events_command))
     application.add_handler(MessageHandler(filters.LOCATION, handle_location))
     application.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, handle_text))
     application.add_error_handler(error_handler)
