@@ -175,7 +175,7 @@ def build_message():
     weather_message = weather_tip(temp, main)
 
     news = news_feeds.get_news(count=3)
-    # quote = daily_quote.get_random_quote()
+    quote = daily_quote.get_random_quote()
     events = daily_quote.get_today_events()
     message = f"""
 📅 امروز {today}
@@ -194,7 +194,7 @@ def build_message():
 
 💡 نقل قول روز:
 
-
+{quote}
 
 رویدادهای امروز:
 
